@@ -1,32 +1,42 @@
 [package]
-name = "rust_ndb"
-description = "ndb parser in rust"
+name = "ndb"
+description = "plan9 ndb parser in rust. Early stage of development."
 version = "0.1.0"
 edition = "2021"
 readme = "README.md"
 build = "build.rs"
 license = "GPLv3"
 keywords = ["plan9", "ndb"]
-categories = ["development-tools"]
-repository = "https://github.com/9glenda/rust_ndb"
+categories = ["database"]
+repository = "https://github.com/9glenda/rust-ndb"
+
+[workspace]
 
 [dependencies]
 clap = { version = "4.4.5", features = ["cargo", "derive"] }
 color-eyre = "0.6.2"
 nom = "7.1.3"
-serde = { version = "1.0.188", optional = true, features = ["serde_derive", "derive"] }
+serde = { version = "1.0.188", optional = true, features = [
+  "serde_derive",
+  "derive",
+] }
 serde_json = { version = "1.0.107", optional = true }
 tracing = "0.1.37"
 tracing-error = "0.2.0"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
 
 [features]
-default = ["capture-spantrace","serde"]
-capture-spantrace = []
+default = ["capture-spantrace", "serde"]
 serde = ["dep:serde", "dep:serde_json"]
+capture-spantrace = []
+
+[lib]
+name = "ndb"
+path = "src/lib.rs"
 
 [[bin]]
-name = "rust_ndb"
+name = "ndb-rs"
+path = "src/main.rs"
 
 [profile.dev]
 opt-level = 0

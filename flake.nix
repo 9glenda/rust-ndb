@@ -44,7 +44,8 @@
           cargo-nextest
           cargo-criterion
           cargo-watch
-          # cargo-llvm-cov
+          cargo-license
+
           bacon
           gnuplot
         ];
@@ -66,8 +67,8 @@
             meta = with pkgs.lib; {
               description = "${cargo.package.description}";
               license = licenses.gpl3;
-              mainProgram = "${cargo.package.name}";
-              # maintainers = with maintainers; [];
+              mainProgram = "${cargo.package.name}-rs";
+              maintainers = with maintainers; [ _9glenda ];
             };
           };
           clippy = naersk'.buildPackage {

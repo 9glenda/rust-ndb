@@ -1,6 +1,7 @@
-# Rust Flake
+# ndb parser for rust
+Using the nom parser combiner.
 
-## Run
+## Nix
 
 ```sh
 nix run
