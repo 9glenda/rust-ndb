@@ -60,3 +60,5 @@
     unused_extern_crates,
     unused_import_braces
 )]
+
+pub mod parser;

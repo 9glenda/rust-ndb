@@ -1,5 +1,6 @@
 use clap::{Parser, Subcommand};
-use color_eyre::{eyre::Report, eyre::eyre, eyre::Result};
+use color_eyre::{eyre::eyre, eyre::Report, eyre::Result};
+use rust_ndb::{self, parser};
 use tracing::{info, instrument};
 
 #[derive(Parser)]
@@ -12,18 +13,31 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    Print { text: String },
+    JsonPrint { text: String },
 }
 
 #[instrument]
-fn main() -> Result<(),Report> {
+fn main() -> Result<(), Report> {
     #[cfg(feature = "capture-spantrace")]
     install_tracing();
     color_eyre::install()?;
     let cli = Cli::parse();
-    println!("{}",match &cli.command {
-        Commands::Print { text } => say_hello(text),
-    }.unwrap());
+    match &cli.command {
+        Commands::JsonPrint { text } => {
+            let parsed = parse_text(text.to_string()).unwrap();
+            #[cfg(not(feature = "serde"))] {
+                warn_span!("missing feature `serde`");
+                eprintln!("falling back to pretty printing");
+                println!("{:#?}", &parsed);
+            }
+            #[cfg(feature = "serde")] {
+                println!("{}", serde_json::to_string(&parsed).unwrap());
+            }
+
+        },
+    }
+
+    // println!("{:?}", parsed);
     Ok(())
 }
 
@@ -46,15 +60,16 @@ fn install_tracing() {
 }
 
 #[instrument]
-fn say_hello(name: &str) -> Result<String,Report> {
-    info!("say hello called");
+fn parse_text(input: String) -> Result<parser::NdbStmt, Report> {
+    info!("parsing {}", input);
 
-    match name {
-        "" | "a" => Err(eyre!("invalid name")), // invalid name
-        x => {
+    match input.clone().as_ref() {
+        "" => Err(eyre!("got empyty input")), // invalid name
+        _ => {
+            // TODO check if _ (text) is empty 
+            let (_, ndb_stmt) = rust_ndb::parser::ndb_stmt(Box::leak(input.into_boxed_str()))?;
 
-    info!("valid name");
-            Ok(format!("hello {}", x))
-        },
+            Ok(ndb_stmt)
+        }
     }
 }
