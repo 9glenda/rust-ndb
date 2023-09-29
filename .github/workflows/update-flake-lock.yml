@@ -1,0 +1,33 @@
+name: update-flake-lock
+on:
+  workflow_dispatch:
+  push:
+  schedule:
+    - cron: '21 17 * * 2' # 05:21 PM, Tuesday
+
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - name: Update flake.lock
+        uses: DeterminateSystems/update-flake-lock@v20
+        with:
+          git-author-name: '9glenda'
+          git-author-email: 'plan9git@proton.me'
+          git-committer-name: '9glenda'
+          git-committer-email: 'plan9git@proton.me'
+          pr-assignees: 9glenda
+          pr-reviewers: 9glenda
+          pr-title: "Automated: Update flake.lock" # Title of PR to be created
+          pr-labels: |                  # Labels to be set on the PR
+            dependencies
+            automated
+            "nix › flake.lock"
+

@@ -1,0 +1,5 @@
+"nix › flake.lock":
+  - flake.lock
+
+"nix":
+  - "*.nix"

@@ -1,0 +1,42 @@
+default_job = "test"
+
+[jobs.clippy]
+command = ["cargo", "clippy", "--color", "always"]
+need_stdout = false
+
+[jobs.check]
+command = ["cargo", "check", "--color", "always"]
+need_stdout = false
+
+[jobs.test]
+command = ["cargo", "test", "--color", "always", "--", "--color", "always"]
+need_stdout = true
+
+[jobs.nextest]
+command = ["cargo", "nextest", "run", "--color", "always"]
+need_stdout = true
+
+[jobs.doc]
+command = ["cargo", "doc", "--color", "always", "--no-deps"]
+need_stdout = false
+
+[jobs.run]
+command = ["cargo", "run", "--color", "always"]
+need_stdout = true
+allow_warnings = true
+
+[jobs.build]
+command = ["cargo", "build", "--color", "always"]
+need_stdout = true
+allow_warnings = true
+
+
+[keybindings]
+n = "job:nextest"
+shift-b = "job:build"
+c = "job:clippy"
+k = "scroll-lines(-1)"
+j = "scroll-lines(1)"
+g = "scroll-page(-1)"
+shift-g = "scroll-page(1)"
+shift-h = "job:previous"
