@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use color_eyre::{eyre::Report, eyre::eyre, eyre::WrapErr, eyre::Result, Section};
+use color_eyre::{eyre::Report, eyre::eyre, eyre::Result};
 use tracing::{info, instrument};
 
 #[derive(Parser)]
