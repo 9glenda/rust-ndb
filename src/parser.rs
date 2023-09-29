@@ -135,7 +135,10 @@ pub fn parse_value(input: &str) -> IResult<&str, NdbValue> {
 /// If the conversion is successful it returns the int.
 /// Else it returns the alphanumeric1 as a string
 fn parse_string_or_int(input: &str) -> IResult<&str, NdbValue> {
-    map(alphanumeric1, |s: &str| s.parse::<i64>().map_or_else(|_| NdbValue::String(s.to_string()), NdbValue::Int))(input)
+    map(alphanumeric1, |s: &str| {
+        s.parse::<i64>()
+            .map_or_else(|_| NdbValue::String(s.to_string()), NdbValue::Int)
+    })(input)
 }
 
 /// Parse a ndb statement
@@ -143,7 +146,7 @@ fn parse_string_or_int(input: &str) -> IResult<&str, NdbValue> {
 /// Invalid syntax will error.
 /// # Examples
 /// ```rust
-/// use rust_ndb::parser;
+/// use ndb::parser;
 /// assert_eq!(
 ///     parser::ndb_stmt("name=glenda"),
 ///     Ok((

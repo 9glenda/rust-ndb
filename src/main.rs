@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 use color_eyre::{eyre::eyre, eyre::Report, eyre::Result};
-use rust_ndb::{self, parser};
+use ndb::{self, parser};
 use tracing::{info, instrument};
 
 #[derive(Parser)]
@@ -25,16 +25,17 @@ fn main() -> Result<(), Report> {
     match &cli.command {
         Commands::JsonPrint { text } => {
             let parsed = parse_text(text.to_string()).unwrap();
-            #[cfg(not(feature = "serde"))] {
+            #[cfg(not(feature = "serde"))]
+            {
                 warn_span!("missing feature `serde`");
                 eprintln!("falling back to pretty printing");
                 println!("{:#?}", &parsed);
             }
-            #[cfg(feature = "serde")] {
+            #[cfg(feature = "serde")]
+            {
                 println!("{}", serde_json::to_string(&parsed).unwrap());
             }
-
-        },
+        }
     }
 
     // println!("{:?}", parsed);
@@ -66,8 +67,8 @@ fn parse_text(input: String) -> Result<parser::NdbStmt, Report> {
     match input.clone().as_ref() {
         "" => Err(eyre!("got empyty input")), // invalid name
         _ => {
-            // TODO check if _ (text) is empty 
-            let (_, ndb_stmt) = rust_ndb::parser::ndb_stmt(Box::leak(input.into_boxed_str()))?;
+            // TODO check if _ (text) is empty
+            let (_, ndb_stmt) = ndb::parser::ndb_stmt(Box::leak(input.into_boxed_str()))?;
 
             Ok(ndb_stmt)
         }
