@@ -68,7 +68,7 @@
               description = "${cargo.package.description}";
               license = licenses.gpl3;
               mainProgram = "${cargo.package.name}-rs";
-              maintainers = with maintainers; [ _9glenda ];
+              maintainers = with maintainers; [_9glenda];
             };
           };
           clippy = naersk'.buildPackage {
@@ -85,7 +85,6 @@
           };
         };
         checks = {
-          # default = packages.default;
           formatting = treefmtEval.config.build.check self;
           lint = packages.clippy;
         };
