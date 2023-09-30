@@ -99,7 +99,6 @@ pub enum NdbValue {
     Bool(bool),
 }
 
-
 #[cfg(feature = "extra-traits")]
 impl fmt::Display for NdbStmt {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -122,7 +121,7 @@ pub fn parse_value(input: &str) -> IResult<&str, NdbValue> {
         //
         // 9
         // ^
-        // int 
+        // int
         parse_string_or_int,
     ))(input)
 }
@@ -152,8 +151,6 @@ impl fmt::Display for NdbValue {
     }
 }
 
-
-
 /// This function matches alphanumeric1 and tries to covert the result into an i64.
 /// If the conversion is successful it returns the int.
 /// Else it returns the alphanumeric1 as a string
@@ -163,7 +160,6 @@ fn parse_string_or_int(input: &str) -> IResult<&str, NdbValue> {
             .map_or_else(|_| NdbValue::String(s.to_string()), NdbValue::Int)
     })(input)
 }
-
 
 /// Parse a ndb statement
 /// # Errors
