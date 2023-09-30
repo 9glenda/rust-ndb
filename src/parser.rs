@@ -25,6 +25,9 @@ use {
     std::collections::HashMap,
 };
 
+#[cfg(feature = "extra-traits")]
+use std::fmt;
+
 /// Struct representing an ast for a ndb database.
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, PartialEq, Clone)]
@@ -96,20 +99,13 @@ pub enum NdbValue {
     Bool(bool),
 }
 
-#[cfg(feature = "serde")]
-impl Serialize for NdbValue {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        match self {
-            NdbValue::Int(value) => serializer.serialize_i64(*value),
-            NdbValue::String(value) => serializer.serialize_str(value),
-            NdbValue::Bool(value) => serializer.serialize_bool(*value),
-        }
+
+#[cfg(feature = "extra-traits")]
+impl fmt::Display for NdbStmt {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}={}", self.key, self.value)
     }
 }
-
 /// parse a ndb value [`NdbValue`]
 ///
 /// # Errors
@@ -124,13 +120,40 @@ pub fn parse_value(input: &str) -> IResult<&str, NdbValue> {
         // the ident (ends with if a new word starts) is a string if there is any letter in it.
         // therefore parse_string has to be first.
         //
-        // TODO
         // 9
         // ^
-        // int
+        // int 
         parse_string_or_int,
     ))(input)
 }
+
+#[cfg(feature = "serde")]
+impl Serialize for NdbValue {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        match self {
+            NdbValue::Int(value) => serializer.serialize_i64(*value),
+            NdbValue::String(value) => serializer.serialize_str(value),
+            NdbValue::Bool(value) => serializer.serialize_bool(*value),
+        }
+    }
+}
+
+#[cfg(feature = "extra-traits")]
+impl fmt::Display for NdbValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            NdbValue::Bool(value) => write!(f, "{}", value),
+            NdbValue::String(value) => write!(f, "{}", value),
+            NdbValue::Int(value) => write!(f, "{}", value),
+        }
+    }
+}
+
+
+
 /// This function matches alphanumeric1 and tries to covert the result into an i64.
 /// If the conversion is successful it returns the int.
 /// Else it returns the alphanumeric1 as a string
@@ -140,6 +163,7 @@ fn parse_string_or_int(input: &str) -> IResult<&str, NdbValue> {
             .map_or_else(|_| NdbValue::String(s.to_string()), NdbValue::Int)
     })(input)
 }
+
 
 /// Parse a ndb statement
 /// # Errors
