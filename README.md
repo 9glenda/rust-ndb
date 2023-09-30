@@ -1,7 +1,6 @@
 # ndb parser for rust
 
-Using the nom parser combiner.
-
+A parser for plan9 [ndb](https://plan9.io/magic/man2html/8/ndb) using the nom parser combiner.
 ## Nix
 
 ```sh
