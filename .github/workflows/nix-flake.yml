@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v5
+        uses: DeterminateSystems/nix-installer-action@v6
       - name: nix build
         run: nix build
   # fmt:
@@ -32,7 +32,7 @@ jobs:
   #   steps:
   #     - uses: actions/checkout@v4
   #     - name: Install Nix
-  #       uses: DeterminateSystems/nix-installer-action@v5
+  #       uses: DeterminateSystems/nix-installer-action@v6
   #     - id: fmt 
   #       run: |
   #         git config user.name '9glenda'
@@ -49,7 +49,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v5
+        uses: DeterminateSystems/nix-installer-action@v6
       - name: nix flake check
         run: nix flake check
 
