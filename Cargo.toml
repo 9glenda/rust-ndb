@@ -13,7 +13,7 @@ repository = "https://github.com/9glenda/rust-ndb"
 [workspace]
 
 [dependencies]
-clap = { version = "4.4.7", features = ["cargo", "derive"] }
+clap = { version = "4.4.8", features = ["cargo", "derive"] }
 color-eyre = "0.6.2"
 nom = "7.1.3"
 serde = { version = "1.0.190", optional = true, features = [
