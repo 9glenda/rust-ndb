@@ -20,7 +20,7 @@ serde = { version = "1.0.193", optional = true, features = [
   "serde_derive",
   "derive",
 ] }
-serde_json = { version = "1.0.108", optional = true }
+serde_json = { version = "1.0.109", optional = true }
 tracing = "0.1.40"
 tracing-error = "0.2.0"
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
